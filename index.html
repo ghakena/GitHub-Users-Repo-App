@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jQuery | Ajax</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1 class="app-heading">GitHub Repository Search</h1>
+  <div class="container">
+    <form id="search-form">
+      <input class="name-input" type="text" placeholder="Enter Username Here...">
+      <input type="submit" value="Search">
+    </form>
+    <br />
+  </div>
+  <h2></h2>
+  <div id="result">
+
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('#search-form').submit((e) => {
+        e.preventDefault();
+        $('#result').empty();
+
+        var username = $('.name-input').val();
+        var url = "https://api.github.com/users/"+username+"/repos";
+        // $.post(url, {username: username});
+
+        $.ajax({
+          method: 'POST',
+          url: url,
+          dataType: 'jsonp',
+          success: (response) => {
+            $.map(response.data, (post, i)=>{
+              console.log(post);
+              $('h2').html('Repositories for ' + username + '.');
+              $('#result').append( '<h4> Name: '+ post.name +'</h4><p>Full Repo Name: ' + post.full_name + '</p><p>Node ID: ' + post.node_id + '</p>');
+            })
+
+          }
+        })
+      })
+
+
+
+    })
+  </script>
+</body>
+</html>
